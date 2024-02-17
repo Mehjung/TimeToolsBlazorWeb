@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Components
+
+<button class="elm-button"
+        disabled="@IsDisabled"
+        @attributes="GetAdditionalAttributes()">
+    @ChildContent
+</button>
+
+@code {
+    [Parameter] public string? Variant { get; set; }
+    [Parameter] public string? Icon { get; set; }
+    [Parameter] public bool IsDisabled { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; } = new Dictionary<string, object>();
+
+    private Dictionary<string, object> GetAdditionalAttributes()
+    {
+        var attributes = new Dictionary<string, object>(AdditionalAttributes);
+
+        if (!string.IsNullOrEmpty(Variant))
+        {
+            attributes["data-variant"] = Variant;
+        }
+
+        if (!string.IsNullOrEmpty(Icon))
+        {
+            attributes["data-icon"] = Icon.ToLower();
+        }
+
+        return attributes;
+    }
+}
