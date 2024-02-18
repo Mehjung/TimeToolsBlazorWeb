@@ -3,20 +3,14 @@
 
 <div class="checkbox-container" style="position: relative; display: inline-block;">
     <input type="checkbox" class="db-checkbox"
-           id="@InputId"
-           name="@Name"
-           checked="@Checked"
-           disabled="@Disabled"
+           id="@InputId" name="@Name"
+           checked="@Checked" disabled="@Disabled"
            data-custom-id="@CustomId"
-           @onchange="OnCheckboxChanged"
-           @attributes="AdditionalAttributes" />
+           @onchange="HandleChange" />
+    <label for="@InputId" class="@LabelClass" LabelHidden="@LabelHidden">@Label</label>
 </div>
 
-<label for="@InputId" class="@LabelClass" hidden="@LabelHidden">@Label</label>
-
 @code {
-
-    // Diese ID ist nur für internen Gebrauch und wird automatisch generiert.
     private string CustomId { get;  } = $"custom-{Guid.NewGuid()}";
 
     [Parameter] public string? InputId { get; set; }
@@ -30,39 +24,34 @@
     [Parameter] public string? Label { get; set; }
     [Parameter] public bool LabelHidden { get; set; }
     [Parameter] public string LabelClass { get; set; } = "";
-
+    
     [Parameter] public EventCallback<bool> CheckedChanged { get; set; }
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public Dictionary<string, object> AdditionalAttributes { get; set; } = new Dictionary<string, object>();
-
-    private async Task OnCheckboxChanged(ChangeEventArgs args)
-    {
-        if (args.Value is bool value)
-        {
-            Checked = value;
-            await CheckedChanged.InvokeAsync(value);
-        }
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        await SetIndeterminateState();
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            
-            await SetIndeterminateState();
+            await SetIndeterminateState(Indeterminate);
         }
     }
     
-    private async Task SetIndeterminateState()
+    protected override async Task OnParametersSetAsync()
     {
-        await JSRuntime.InvokeVoidAsync("setCheckboxIndeterminateState", CustomId, Indeterminate);
-        
+        await SetIndeterminateState(Indeterminate);
     }
 
+    public async Task SetIndeterminateState(bool value)
+    {
+        await JSRuntime.InvokeVoidAsync("setCheckboxIndeterminateState", CustomId, value);
+    }
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        if (e.Value is bool value)
+        {
+            Checked = value;
+            await CheckedChanged.InvokeAsync(value);
+            //await SetIndeterminateState(Indeterminate); // Optional, falls sich der Indeterminate-Zustand ändern soll
+        }
+    }
 }

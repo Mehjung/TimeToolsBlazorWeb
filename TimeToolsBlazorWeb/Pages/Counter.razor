@@ -1,4 +1,7 @@
 ﻿@page "/counter"
+@using System.Text.Json
+
+
 
 
 <PageTitle>Counter</PageTitle>
@@ -9,42 +12,21 @@
 
 <button class="btn btn-primary" @onclick="SetI">Click me</button>
 <Dbbutton Icon="Download" Variant="brand-primary" @onclick="IncrementCount">Download</Dbbutton>
-<Dbcheckbox label="CHECKER" name="checkbox-name" label-hidden="@false"></Dbcheckbox>
+<Dbcheckbox label="CHECKER" name="checkbox-name" LabelHidden="@false"></Dbcheckbox>
 <Dbcheckbox label="Checkbox" name="checkbox-name" indeterminate="@indeterminate"></Dbcheckbox>
 <Dbcheckbox label="Checkbox" name="checkbox-name" disabled></Dbcheckbox>
 <Dbcheckbox label="Checkbox" name="checkbox-name"></Dbcheckbox>
 
-<Dbchip>default</Dbchip>
 
-<Dbchip variant="light">light</Dbchip>
-
-<Dbchip variant="informative">informative</Dbchip>
-
-<Dbchip variant="success">success</Dbchip>
-
-<Dbchip variant="poi-essen-trinken" selected>poi-essen-trinken</Dbchip>
-
-<Dbchip variant="poi-einkaufen">poi-einkaufen</Dbchip>
-
-<Dbchip variant="track">track</Dbchip>
-
-<Dbchip interactiontype="filter" icon="account">icon</Dbchip>
-
-<Dbchip interactiontype="filter" iconafter="account">iconafter</Dbchip>
-
-<Dbchip interactiontype="filter" icon="account" iconafter="account">
-    icon + iconafter
-  </Dbchip>
 @code {
     private int currentCount = 0;
-    
 
     private void IncrementCount()
     {
         currentCount++;
     }
 
-    private bool indeterminate;
+    private bool indeterminate = true;
     private void SetI()
     {
         indeterminate = !indeterminate;

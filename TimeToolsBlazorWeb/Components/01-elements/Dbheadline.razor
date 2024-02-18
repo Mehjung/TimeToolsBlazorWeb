@@ -1,0 +1,42 @@
+@using Microsoft.AspNetCore.Components
+
+@switch (Variant)
+{
+    case "1":
+        <h1 class="elm-headline" data-pulse="@Pulse">
+            @ChildContent
+        </h1>
+        break;
+    case "2":
+        <h2 class="elm-headline" data-pulse="@Pulse">
+            @ChildContent
+        </h2>
+        break;
+    case "4":
+        <h4 class="elm-headline" data-pulse="@Pulse">
+            @ChildContent
+        </h4>
+        break;
+    case "5":
+        <h5 class="elm-headline" data-pulse="@Pulse">
+            @ChildContent
+        </h5>
+        break;
+    case "6":
+        <h6 class="elm-headline" data-pulse="@Pulse">
+            @ChildContent
+        </h6>
+        break;
+    case "3":
+    default:
+        <h3 class="elm-headline" data-pulse="@Pulse">
+            @ChildContent
+        </h3>
+        break;
+}
+
+@code {
+    [Parameter] public string Variant { get; set; } = "3";
+    [Parameter] public bool Pulse { get; set; } = false;
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}
