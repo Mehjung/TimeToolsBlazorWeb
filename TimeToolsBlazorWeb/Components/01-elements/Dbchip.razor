@@ -29,14 +29,14 @@
     private Dictionary<string, object> GetInputAttributes()
     {
         var attributes = new Dictionary<string, object>
-        {
-            {"class", "elm-chip"},
-            {"type", InteractionType == "filter" ? "checkbox" : "radio"},
-            {"id", InputId},
-            {"name", Name},
-            {"disabled", IsDisabled},
-            {"checked", Selected}
-        };
+{
+{"class", "elm-chip"},
+{"type", InteractionType == "filter" ? "checkbox" : "radio"},
+{"id", InputId},
+{"name", Name},
+{"disabled", IsDisabled},
+{"checked", Selected}
+};
 
         return attributes;
     }
