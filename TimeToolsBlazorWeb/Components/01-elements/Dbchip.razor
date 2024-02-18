@@ -1,0 +1,70 @@
+@using Microsoft.AspNetCore.Components
+
+<div class="elm-chip-container">
+    <input @attributes="GetInputAttributes()" />
+    <label for="@InputId" class="@GetLabelClass()" @attributes="GetAdditionalAttributes()">
+        @if (!string.IsNullOrEmpty(Icon))
+        {
+            <i class="@($"icon {Icon.ToLower()}")"></i>
+        }
+        @ChildContent
+        @if (!string.IsNullOrEmpty(IconAfter))
+        {
+            <i class="@($"icon {IconAfter.ToLower()}")"></i>
+        }
+    </label>
+</div>
+
+@code {
+    [Parameter] public string? Variant { get; set; }
+    [Parameter] public string? Icon { get; set; }
+    [Parameter] public string? IconAfter { get; set; }
+    [Parameter] public bool IsDisabled { get; set; } = false;
+    [Parameter] public string Name { get; set; } = "chips";
+    [Parameter] public bool Selected { get; set; } = false;
+    [Parameter] public string InputId { get; set; } = $"chip-{Guid.NewGuid()}";
+    [Parameter] public string InteractionType { get; set; } = "selection";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private Dictionary<string, object> GetInputAttributes()
+    {
+        var attributes = new Dictionary<string, object>
+        {
+            {"class", "elm-chip"},
+            {"type", InteractionType == "filter" ? "checkbox" : "radio"},
+            {"id", InputId},
+            {"name", Name},
+            {"disabled", IsDisabled},
+            {"checked", Selected}
+        };
+
+        return attributes;
+    }
+
+    private Dictionary<string, object> GetAdditionalAttributes()
+    {
+        var attributes = new Dictionary<string, object>();
+
+        if (!string.IsNullOrEmpty(Variant))
+        {
+            attributes["data-variant"] = Variant;
+        }
+
+        if (!string.IsNullOrEmpty(Icon))
+        {
+            attributes["data-icon"] = Icon.ToLower();
+        }
+
+        if (!string.IsNullOrEmpty(IconAfter))
+        {
+            attributes["data-icon-after"] = IconAfter.ToLower();
+        }
+
+        return attributes;
+    }
+
+    private string GetLabelClass()
+    {
+        return $"chip-label {(IsDisabled ? "disabled" : "")}";
+    }
+}
