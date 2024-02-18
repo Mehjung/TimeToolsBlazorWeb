@@ -1,0 +1,89 @@
+@using Microsoft.AspNetCore.Components
+
+
+
+<div>
+    <input type="@Type" id="@Id" class="elm-input" @bind="Value" aria-invalid="@Ariainvalid"
+        aria-required="@Ariarequired" autocomplete="@Autocomplete" autofocus="@Autofocus" disabled="@Disabled"
+        list="@List" max="@Max" maxlength="@Maxlength" min="@Min" minlength="@Minlength" name="@Name" pattern="@Pattern"
+        placeholder="@Label" readonly="@Readonly" required="@Required" size="@Size" step="@Step"
+        aria-labelledby="@($"{Id}-label")" data-variant="semitransparent">
+
+    <!-- Für Screenreader sichtbar, visuell aber ausgeblendet -->
+    <label @attributes="GetAdditionalAttributes()" class="elm-label" for="@Id" aria-hidden="true" id="@($"{Id}-label")">
+        @Label
+    </label>
+
+    @if (!string.IsNullOrWhiteSpace(Description))
+    {
+        <p id="@($"{Id}-hint")" class="description">
+            @Description
+        </p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(List))
+    {
+        <datalist id="@List">
+            @ChildContent
+        </datalist>
+    }
+</div>
+
+
+
+@code {
+    // Parameter-Definitionen
+    [Parameter] public string Id { get; set; } = $"input-{Guid.NewGuid()}";
+    [Parameter] public string Type { get; set; } = "text";
+    [Parameter] public string? Ariainvalid { get; set; }
+    [Parameter] public string? Ariarequired { get; set; }
+    [Parameter] public string? Autocomplete { get; set; }
+    [Parameter] public bool Autofocus { get; set; }
+    [Parameter] public bool Disabled { get; set; }
+    [Parameter] public string? List { get; set; }
+    [Parameter] public int? Max { get; set; }
+    [Parameter] public string? Maxlength { get; set; }
+    [Parameter] public int? Min { get; set; }
+    [Parameter] public string? Minlength { get; set; }
+    [Parameter] public string? Name { get; set; }
+    [Parameter] public string? Pattern { get; set; }
+    [Parameter] public string? Placeholder { get; set; }
+    [Parameter] public bool? Readonly { get; set; }
+    [Parameter] public bool? Required { get; set; }
+    [Parameter] public int? Size { get; set; }
+    [Parameter] public decimal? Step { get; set; }
+    [Parameter] public string? Variant { get; set; }
+    [Parameter] public string? LabelHidden { get; set; }
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public string? Description { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Value { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; } = new Dictionary<string, object>();
+
+    private Dictionary<string, object> GetAdditionalAttributes()
+    {
+        // Stellen Sie sicher, dass Sie überprüfen, ob LabelHidden null ist, um NullReferenceExceptions zu vermeiden.
+        var attributes = new Dictionary<string, object>();
+
+        if (!string.IsNullOrEmpty(LabelHidden))
+        {
+            attributes.Add("data-label-hidden", LabelHidden);
+        }
+
+        return attributes;
+    }
+
+
+    protected override void OnParametersSet()
+    {
+        if (AdditionalAttributes.TryGetValue("label-hidden", out var value))
+        {
+            // Speichern Sie den Wert direkt als String
+            LabelHidden = value?.ToString();
+        }
+    }
+
+
+}

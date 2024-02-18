@@ -17,19 +17,19 @@
     }
     else if (ResponsiveMediaQueries.Any())
     {
-<figure>
-    <picture>
-        @foreach (var query in ResponsiveMediaQueries)
-        {
-            <source srcset="@query.SrcSet" media="@query.Media" />
-        }
-        <img class="elm-image" src="@Src" alt="@Alt" width="@Width" height="@Height" loading="@Loading" />
-    </picture>
-    @if (!string.IsNullOrEmpty(Caption))
-    {
-        <figcaption id="@AriaId">@Caption</figcaption>
-    }
-</figure>
+        <figure>
+            <picture>
+                @foreach (var query in ResponsiveMediaQueries)
+                {
+                    <source srcset="@query.SrcSet" media="@query.Media" />
+                }
+                <img class="elm-image" src="@Src" alt="@Alt" width="@Width" height="@Height" loading="@Loading" />
+            </picture>
+            @if (!string.IsNullOrEmpty(Caption))
+            {
+                <figcaption id="@AriaId">@Caption</figcaption>
+            }
+        </figure>
     }
     else
     {
@@ -58,28 +58,29 @@
     private IEnumerable<ResponsiveMediaQueryItem> ResponsiveMediaQueries => ParseResponsiveMediaQueries();
     private string AriaId { get; set; } = $"image-{Guid.NewGuid()}";
 
-public class ResponsiveMediaQueryItem
-{
-    public string? SrcSet { get; set; }
-    public string? Media { get; set; }
-}
-
-private IEnumerable<ResponsiveMediaQueryItem> ParseResponsiveMediaQueries()
-{
-    if (!string.IsNullOrEmpty(ResponsiveMediaQuery))
+    public class ResponsiveMediaQueryItem
     {
-        try
-        {
-            return JsonSerializer.Deserialize<IEnumerable<ResponsiveMediaQueryItem>>(ResponsiveMediaQuery) ?? Enumerable.Empty<ResponsiveMediaQueryItem>();
-        }
-        catch (JsonException)
-        {
-            // Fehlerbehandlung
-            return Enumerable.Empty<ResponsiveMediaQueryItem>();
-        }
+        public string? SrcSet { get; set; }
+        public string? Media { get; set; }
     }
 
-    return Enumerable.Empty<ResponsiveMediaQueryItem>();
-}
+    private IEnumerable<ResponsiveMediaQueryItem> ParseResponsiveMediaQueries()
+    {
+        if (!string.IsNullOrEmpty(ResponsiveMediaQuery))
+        {
+            try
+            {
+                return JsonSerializer.Deserialize<IEnumerable<ResponsiveMediaQueryItem>>(ResponsiveMediaQuery) ??
+                Enumerable.Empty<ResponsiveMediaQueryItem>();
+            }
+            catch (JsonException)
+            {
+                // Fehlerbehandlung
+                return Enumerable.Empty<ResponsiveMediaQueryItem>();
+            }
+        }
+
+        return Enumerable.Empty<ResponsiveMediaQueryItem>();
+    }
 
 }
