@@ -1,0 +1,56 @@
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+
+
+@code {
+    [Parameter] public string? Current { get; set; }
+    [Parameter] public string? Href { get; set; }
+    [Parameter] public string? Hreflang { get; set; }
+    [Parameter] public string? Icon { get; set; }
+    [Parameter] public string IconVariant { get; set; } = "24-outline";
+    [Parameter] public bool IconOnly { get; set; }
+    [Parameter] public string? Media { get; set; }
+    [Parameter] public string? Rel { get; set; }
+    [Parameter] public string? Target { get; set; }
+    [Parameter] public string? Type { get; set; }
+    [Parameter] public string? Text { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}
+
+<a class="@GetLinkClasses()" href="@Href" hreflang="@Hreflang" @attributes="GetAdditionalAttributes()" rel="@Rel"
+    target="@Target" aria-current="@Current">
+    @if (!string.IsNullOrWhiteSpace(Icon))
+    {
+        <Dbicon Icon="@Icon" Variant="@IconVariant" />
+    }
+    @RenderContent
+</a>
+
+@code {
+    private RenderFragment RenderContent => builder =>
+    {
+        if (!string.IsNullOrWhiteSpace(Text))
+        {
+            builder.AddContent(0, Text);
+        }
+        else if (ChildContent != null)
+        {
+            builder.AddContent(1, ChildContent);
+        }
+    };
+    private Dictionary<string, object> GetAdditionalAttributes()
+    {
+        var attributes = new Dictionary<string, object>();
+
+        if (!string.IsNullOrWhiteSpace(Type))
+        {
+            attributes.Add("data-type", Type);
+        }
+
+        return attributes;
+    }
+    private string GetLinkClasses()
+    {
+        return $"elm-link{(IconOnly ? " is-icon-text-replace" : "")}";
+    }
+}

@@ -1,0 +1,26 @@
+@using Microsoft.AspNetCore.Components
+
+@code {
+    [Parameter] public string? Icon { get; set; }
+    [Parameter] public string? Variant { get; set; }
+
+    // Erzeugt ein Dictionary mit zusätzlichen Attributen, die auf das span-Element angewendet werden sollen.
+    private Dictionary<string, object> GetAdditionalAttributes()
+    {
+        var attributes = new Dictionary<string, object>();
+
+        if (!string.IsNullOrEmpty(Icon))
+        {
+            attributes.Add("data-icon", Icon);
+        }
+        if (!string.IsNullOrEmpty(Variant))
+        {
+            attributes.Add("data-icon-variant", Variant);
+        }
+
+
+        return attributes;
+    }
+}
+
+<span @attributes="GetAdditionalAttributes()" aria-hidden="true"></span>

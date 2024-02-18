@@ -1,0 +1,17 @@
+@using Microsoft.AspNetCore.Components
+
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="elm-logo" @attributes="GetAdditionalAttributes()">
+    <use href="Components/assets/images/db_logo.svg#logo"></use>
+</svg>
+
+@code {
+    [Parameter] public string Size { get; set; } = "medium"; // Standardgröße ist medium
+
+    private Dictionary<string, object> GetAdditionalAttributes()
+    {
+        return new Dictionary<string, object>
+{
+{"data-size", Size}
+};
+    }
+}

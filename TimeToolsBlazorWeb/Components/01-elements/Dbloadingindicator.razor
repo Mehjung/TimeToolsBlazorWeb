@@ -1,0 +1,32 @@
+@using Microsoft.AspNetCore.Components
+
+<svg class="elm-loadingindicator" viewBox="0 0 44 44" aria-labelledby="elm-loadingindicator__description" role="img"
+    @attributes="GetAdditionalAttributes()">
+    <title id="elm-loadingindicator__description">@Text</title>
+    <circle class="elm-loadingindicator__circle" cx="22" cy="22" r=@Radius fill="none" stroke-miterlimit="10"></circle>
+</svg>
+
+@code {
+    [Parameter] public string Size { get; set; } = "m"; // Standardgröße ist m
+    [Parameter] public string Text { get; set; } = "Lädt...";
+
+    private Dictionary<string, object> GetAdditionalAttributes()
+    {
+        var attributes = new Dictionary<string, object>
+{
+{"data-size", Size}
+};
+
+        return attributes;
+    }
+
+    private string Radius => Size switch
+    {
+        "xl" => "26",
+        "l" => "23",
+        "m" => "20",
+        "s" => "17",
+        "xs" => "14",
+        _ => "20" // Standardradius, wenn keine passende Größe gefunden wird
+    };
+}
